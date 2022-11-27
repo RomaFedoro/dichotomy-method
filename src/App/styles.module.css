@@ -1,0 +1,21 @@
+.container {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    column-gap: 240px;
+}
+
+.form {
+    width: 600px;
+    min-height: 860px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 64px;
+}
+
+.text {
+    width: max-content;
+    font-family: 'Computer Modern Serif';
+    font-size: 28px;
+    user-select: none;
+}
