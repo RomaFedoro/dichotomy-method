@@ -10,15 +10,23 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
   const [result, setResult] = useState({});
   const [total, setTotal] = useState(0);
 
-  // useEffect(() => {
-  //   if (!params) return;
-  //   drawGraph(ref, params);
-  // }, []);
+  useEffect(() => {
+    if (!params) return;
+    drawGraph(ref, params);
+  }, []);
 
   useEffect(() => {
-    if (!params && params.func === undefined) return;
+    if (!params) return;
 
     const { start, end, precision, func, isMin } = params;
+
+    if (
+      start === undefined ||
+      end === undefined ||
+      precision === undefined ||
+      func === undefined
+    )
+      return;
 
     let a = start;
     let b = end;
@@ -28,7 +36,10 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
 
     const intr = setInterval(function () {
       if (Math.abs(b - a) < precision) {
+        const x = (a + b) / 2;
+        drawGraph(ref, { ...params, a: x, b: x });
         clearInterval(intr);
+        return;
       }
 
       const result = (isMin ? findLocalMinimum : findLocalMaximum)({
@@ -46,7 +57,6 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
     }, 1000);
 
     return () => {
-      // drawGraph(ref, { ...data, numberRectangles });
       setTotal(0);
       setResult({});
       clearInterval(intr);
@@ -64,6 +74,10 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
     setSolutionVisible(true);
   };
 
-  return { total, params, result, ref, handleSubmit };
+  const onBlur = (value) => {
+    drawGraph(ref, convertInputData(value));
+  };
+
+  return { total, params, result, ref, onBlur, handleSubmit };
 };
 

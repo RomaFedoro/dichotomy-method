@@ -42,7 +42,21 @@ const drawGraphFunction = (ctx) => {
 };
 
 const drawRange = (ctx, { a, b }) => {
-  const { getCoord, scale } = dataGraph;
+  const { getCoord, scale, func } = dataGraph;
+  console.log(a, b);
+
+  if (a !== undefined && a === b) {
+    const { x, y } = getCoord(a);
+    const text = `(${a.toFixed(3)}; ${func(a).toFixed(3)})`;
+    ctx.beginPath();
+    ctx.arc(x, y, SIZE.point, 0, 2 * Math.PI, false);
+    ctx.fillStyle = COLORS.point;
+    ctx.font = `${SIZE.normal}px Computer Modern Serif`;
+    ctx.textAlign = "center";
+    ctx.fillText(text, x, y + SIZE.normal + SIZE.point * 2);
+    ctx.fill();
+    return;
+  }
 
   ctx.fillStyle = COLORS.rectBackground;
   ctx.setLineDash([0, 0]);
@@ -87,16 +101,16 @@ const drawDashLine =
     ctx.lineWidth = THICKNESS.normal;
     ctx.strokeStyle = ctx.fillStyle = COLORS.normal;
     ctx.font = `${SIZE.normal}px Computer Modern Serif`;
-    let testCoord = coord;
+    let textCoord = coord;
 
     if (isStart) {
       ctx.textAlign = "end";
-      testCoord -= SIZE.normal / 4;
+      textCoord -= SIZE.normal / 4;
     } else {
       ctx.textAlign = "start";
-      testCoord += SIZE.normal / 4;
+      textCoord += SIZE.normal / 4;
     }
-    ctx.fillText(text, testCoord, HEIGHT_GRAPH - 1);
+    ctx.fillText(text, textCoord, HEIGHT_GRAPH - 1);
   };
 
 const clearCanvas = (ctx) => {
@@ -120,12 +134,13 @@ const drawSegmentLine = (ctx) => {
 
 const drawSegments = (ctx) => {
   const { getCoord, globalMin: min, globalMax: max } = dataGraph;
-  // const widthSegmentX = 10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
 
-  const widthSegmentX = 10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
+  const widthSegmentX =
+    10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
   let currSegmentX = Math.ceil(min.x / widthSegmentX) * widthSegmentX;
 
-  const widthSegmentY = 10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
+  const widthSegmentY =
+    10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
   let currSegmentY = Math.ceil(min.y / widthSegmentY) * widthSegmentY;
 
   ctx.strokeStyle = ctx.fillStyle = COLORS.axis;
@@ -143,15 +158,6 @@ const drawSegments = (ctx) => {
     if (currSegmentY !== 0) {
       const { y } = getCoord(0, currSegmentY);
       drawLine(ctx, y, true, drawSegmentLine);
-
-      // ctx.fillStyle = COLORS.axis;
-      // ctx.setLineDash([0, 0]);
-      // ctx.fillRect(
-      //   x - SIZE.segments / 2,
-      //   y - THICKNESS.segments / 2,
-      //   SIZE.segments,
-      //   THICKNESS.segments
-      // );
     }
     currSegmentY += widthSegmentY;
   }
@@ -172,7 +178,7 @@ const drawNormal = (ctx) => {
 };
 
 const drawGraph = async (ref, params) => {
-  const { a, b, func } = params;
+  const { func } = params;
 
   updateDataGraph(params);
 
@@ -187,7 +193,6 @@ const drawGraph = async (ref, params) => {
   drawGraphFunction(ctx);
   drawRange(ctx, params);
   drawNormal(ctx);
-  // drawBorderRange(ctx, params);
 };
 
 export default drawGraph;

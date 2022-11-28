@@ -8,13 +8,14 @@ import PrecisionField from "./components/PrecisionField";
 import Select from "./components/Select";
 import styles from "./styles.module.css";
 
-const Form = ({ defaultValues, onSubmit }) => {
+const Form = ({ defaultValues, onSubmit, onBlur }) => {
   const { handleSubmit, control } = useForm({ defaultValues });
 
   return (
     <form
       className={styles.container}
       onSubmit={handleSubmit(onSubmit)}
+      onBlur={onBlur}
     >
       <Container label="Функция">
         <Select control={control} nameField="funcId" data={FUNCTIONS} isMath />

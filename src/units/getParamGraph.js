@@ -77,6 +77,7 @@ const getParamGraph = (params) => {
     ...globalCoord,
     scale,
     step,
+    func,
     getCoord,
   };
 };
