@@ -34,31 +34,29 @@ const App = () => {
                 {EXTREMUMS[extremumId].text.toLowerCase()} на отрезке
                 x&nbsp;∈&nbsp;[{start};&nbsp;{end}] с&nbsp;точностью
                 ε&nbsp;=&nbsp;
-                {precision}
+                {precision.toFixed(precisionCount)}
               </div>
             </Container>
             <Container label="Количество итераций">
               <div className={styles.text}>n = {total}</div>
             </Container>
             {a !== undefined && b !== undefined && (
-              <Container label="Точка находится в диапозоне">
-                <div className={styles.text}>
-                  a = {a.toFixed(precisionCount)}
-                </div>
-                <div className={styles.text}>
-                  b = {b.toFixed(precisionCount)}
-                </div>
-              </Container>
-            )}
-            {x !== undefined && (
-              <Container label="Ответ">
-                <div className={styles.text}>
-                  x = {x.toFixed(precisionCount)}
-                </div>
-                <div className={styles.text}>
-                  f(x) = {func(x).toFixed(precisionCount)}
-                </div>
-              </Container>
+              <>
+                <Container label="Точка находится в диапозоне">
+                  <div className={styles.text}>
+                    x&nbsp;∈&nbsp;[{a.toFixed(precisionCount)};&nbsp;
+                    {b.toFixed(precisionCount)}]
+                  </div>
+                </Container>
+                <Container label="Ответ">
+                  <div className={styles.text}>
+                    x ≈ {((a + b) / 2).toFixed(precisionCount)}
+                  </div>
+                  <div className={styles.text}>
+                    f(x) ≈ {func((a + b) / 2).toFixed(precisionCount)}
+                  </div>
+                </Container>
+              </>
             )}
             <button onClick={() => setIsSolitionVisible(false)}>
               Ввести новые значения

@@ -23,7 +23,7 @@ const convertInputData = (params) => {
     start: Math.min(startPoint, endPoint),
     end: Math.max(startPoint, endPoint),
     precision: 10 ** -getValidParam("precisionCount"),
-    precisionCount,
+    precisionCount: Number(precisionCount),
     func: FUNCTIONS[getValidParam("funcId")].func,
     funcId,
     extremumId,
