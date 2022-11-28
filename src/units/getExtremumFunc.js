@@ -14,11 +14,11 @@ const getExtremumFunc = ({ start, end, precision, func }) => {
     if (y > max) max = y;
   }
 
-  const maxValueY = end * MAX_SCALE_Y;
+  const maxValueY = Math.abs((end - start) * MAX_SCALE_Y);
 
   return {
-    min: Math.max(min, Math.min(-maxValueY, maxValueY)),
-    max: Math.min(max, Math.max(-maxValueY, maxValueY)),
+    min: Math.max(min, -maxValueY),
+    max: Math.min(max, maxValueY),
   };
 };
 

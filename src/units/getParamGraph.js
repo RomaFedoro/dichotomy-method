@@ -48,6 +48,7 @@ const getParamGraph = (params) => {
     y: -SIZE_Y / (coords.max.y - coords.min.y),
   };
 
+
   const paddingX = Math.abs(WIDTH_PADDING / scale.x);
   const paddingY = Math.abs(HEIGHT_PADDING / scale.y);
 

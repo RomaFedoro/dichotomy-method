@@ -159,10 +159,9 @@ const drawSegments = (ctx) => {
   }
 };
 
-const drawNormal = (ctx) => {
-  const { getCoord, min, max } = dataGraph;
-  const start = min.x;
-  const end = max.x;
+const drawNormal = (ctx, params) => {
+  const { getCoord } = dataGraph;
+  const { start, end } = params;
 
   const { x: minX } = getCoord(start, 0);
   drawLine(ctx, minX, false, drawDashLine(start));
@@ -188,7 +187,7 @@ const drawGraph = async (ref, params) => {
   drawAxios(ctx);
   drawGraphFunction(ctx);
   drawRange(ctx, params);
-  drawNormal(ctx);
+  drawNormal(ctx, params);
 };
 
 export default drawGraph;
