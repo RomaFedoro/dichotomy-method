@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Container from "../../components/Container";
 import EXTREMUMS from "../../constants/extremum";
@@ -8,8 +8,14 @@ import PrecisionField from "./components/PrecisionField";
 import Select from "./components/Select";
 import styles from "./styles.module.css";
 
-const Form = ({ defaultValues, onSubmit, onBlur }) => {
-  const { handleSubmit, control } = useForm({ defaultValues });
+const Form = ({ defaultValues, onSubmit, draw }) => {
+  const { handleSubmit, getValues, control } = useForm({ defaultValues });
+
+  const onBlur = () => draw(getValues());
+
+  useEffect(() => {
+    draw(defaultValues);
+  }, []);
 
   return (
     <form

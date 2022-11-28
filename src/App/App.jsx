@@ -16,7 +16,7 @@ const App = () => {
   const {
     total,
     ref,
-    onBlur,
+    draw,
     result: { a, b, x },
     params: { func, funcId, start, end, precisionCount, precision, extremumId },
     handleSubmit,
@@ -64,7 +64,7 @@ const App = () => {
             </button>
           </>
         ) : (
-          <Form defaultValues={DEFAULT_VALUES} onSubmit={handleSubmit} onBlur={onBlur} />
+          <Form defaultValues={DEFAULT_VALUES} onSubmit={handleSubmit} draw={draw} />
         )}
       </div>
       <Graph ref={ref} />

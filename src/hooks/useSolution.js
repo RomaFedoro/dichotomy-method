@@ -12,11 +12,6 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
 
   useEffect(() => {
     if (!params) return;
-    drawGraph(ref, params);
-  }, []);
-
-  useEffect(() => {
-    if (!params) return;
 
     const { start, end, precision, func, isMin } = params;
 
@@ -74,10 +69,10 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
     setSolutionVisible(true);
   };
 
-  const onBlur = (value) => {
+  const draw = (value) => {
     drawGraph(ref, convertInputData(value));
   };
 
-  return { total, params, result, ref, onBlur, handleSubmit };
+  return { total, params, result, ref, draw, handleSubmit };
 };
 

@@ -1,17 +1,20 @@
+import EXTREMUMS from "./extremum";
 import FUNCTIONS from "./func";
 
 export const MIN_VALUES = {
-  start: -100_000,
-  end: -100_000,
+  start: -100,
+  end: -100,
   precisionCount: 1,
   funcId: 0,
+  extremumId: 0,
 };
 
 export const MAX_VALUES = {
-  start: 100_000,
-  end: 100_000,
+  start: 100,
+  end: 100,
   precisionCount: 5,
   funcId: FUNCTIONS.length - 1,
+  extremumId: EXTREMUMS.length - 1,
 };
 
 export const DEFAULT_VALUES = {
@@ -29,3 +32,4 @@ export const EMPTY_VALUES = {
   funcId: 0,
   extremumId: 0,
 };
+
