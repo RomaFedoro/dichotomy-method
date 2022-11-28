@@ -8,12 +8,8 @@ import Solution from "../components/Solution";
 
 const App = () => {
   const [isSolitionVisible, setIsSolitionVisible] = useState(false);
-  const { total, ref, draw, result, params, handleSubmit } = useSolution(
-    DEFAULT_VALUES,
-    setIsSolitionVisible
-  );
-
-  const openForm = useCallback(() => setIsSolitionVisible(false));
+  const { total, ref, draw, result, params, openForm, handleSubmit } =
+    useSolution(DEFAULT_VALUES, setIsSolitionVisible);
 
   return (
     <div className={styles.container}>

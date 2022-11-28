@@ -10,7 +10,7 @@ export const SIZE_Y = HEIGHT_GRAPH - 2 * HEIGHT_PADDING;
 export const DEFAULT_MIN_X = 0;
 export const DEFAULT_MIN_Y = 0;
 
-export const DEFAULT_STEP = 0.01;
+export const DEFAULT_STEP = 0.0001;
 export const MAX_SCALE_Y = 10;
 
 export const SEGMENTS = 10;

@@ -58,6 +58,13 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
     };
   }, [params]);
 
+  const openForm = () => {
+    setTotal(0);
+    setResult({});
+    setParams({});
+    setSolutionVisible(false);
+  };
+
   const handleSubmit = (value) => {
     if (
       Object.keys({ ...params, ...value }).every(
@@ -73,6 +80,6 @@ export const useSolution = (defaultValues, setSolutionVisible) => {
     drawGraph(ref, convertInputData(value));
   };
 
-  return { total, params, result, ref, draw, handleSubmit };
+  return { total, params, result, ref, draw, openForm, handleSubmit };
 };
 

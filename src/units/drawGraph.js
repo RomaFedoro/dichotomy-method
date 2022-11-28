@@ -42,7 +42,7 @@ const drawGraphFunction = (ctx) => {
 };
 
 const drawRange = (ctx, { a, b }) => {
-  const { getCoord, scale, func } = dataGraph;
+  const { getCoord, func } = dataGraph;
   if (a !== undefined && a === b) {
     const { x, y } = getCoord(a);
     const text = `(${a.toFixed(3)}; ${func(a).toFixed(3)})`;
@@ -64,9 +64,7 @@ const drawRange = (ctx, { a, b }) => {
   const { x: x1 } = getCoord(a);
   const { x: x2 } = getCoord(b);
 
-  if (Math.abs(b - a) * scale.x > THICKNESS.rect * 2) {
-    ctx.fillRect(x1, 0, x2 - x1, HEIGHT_GRAPH);
-  }
+  ctx.fillRect(x1, 0, x2 - x1, HEIGHT_GRAPH);
 };
 
 const drawLine = (ctx, coord, isHorizontal = true, custom) => {

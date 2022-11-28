@@ -1,16 +1,18 @@
+// Тут можно добавить свои функции
 const FUNCTIONS = [
   {
     func: (x) => x ** 2 - 4,
     text: "f(x) = x^2 - 4",
   },
   {
-    func: (x) => 2.1 * Math.abs(x),
-    text: "f(x) = 2.1 |x|",
+    func: (x) => (1 / 32) * (x + 1) ** 3 * (x - 3) ** 4,
+    text: "f(x) = \\frac{1}{32} (x + 1)^3  (x - 3)^4",
   },
   {
-    func: (x) => -(x ** 3) + x ** 5,
-    text: "f(x) = x^5 - x^3",
+    func: (x) => x * Math.sin(x),
+    text: "f(x) = x sin(x)",
   },
 ];
 
 export default FUNCTIONS;
+
