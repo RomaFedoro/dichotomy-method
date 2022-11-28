@@ -43,8 +43,6 @@ const drawGraphFunction = (ctx) => {
 
 const drawRange = (ctx, { a, b }) => {
   const { getCoord, scale, func } = dataGraph;
-  console.log(a, b);
-
   if (a !== undefined && a === b) {
     const { x, y } = getCoord(a);
     const text = `(${a.toFixed(3)}; ${func(a).toFixed(3)})`;

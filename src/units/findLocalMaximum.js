@@ -1,6 +1,5 @@
 const findLocalMaximum = ({ func, a, b, precision }) => {
   const x = (a + b) / 2;
-  console.log(func);
   const f1 = func(x - precision);
   const f2 = func(x + precision);
 
