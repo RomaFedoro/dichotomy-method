@@ -1,7 +1,6 @@
 .block {
     position: relative;
     flex: 1;
-    z-index: 2;
 }
 
 .header, .item {
@@ -12,6 +11,7 @@
     padding: 16px;
     border: none;
     cursor: pointer;
+    font-weight: 400;
 }
 
 .item {
@@ -39,10 +39,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 3;
     border: 1px solid #c8cbce;
     border-radius: 6px;
     transition: .1s border;
+}
+
+.header:hover {
+    background-color: transparent;
 }
 
 .icon {
@@ -62,6 +65,7 @@
     right: 0;
     display: flex;
     width: 100%;
+    z-index: 2;
     flex-direction: column;
     display: none;
     overflow: hidden;

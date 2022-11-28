@@ -1,5 +1,5 @@
-export const WIDTH_GRAPH = 1120;
-export const HEIGHT_GRAPH = 800;
+export const WIDTH_GRAPH = 1024;
+export const HEIGHT_GRAPH = 1024;
 
 export const WIDTH_PADDING = 60;
 export const HEIGHT_PADDING = 60;
@@ -11,3 +11,6 @@ export const DEFAULT_MIN_X = 0;
 export const DEFAULT_MIN_Y = 0;
 
 export const DEFAULT_STEP = 0.01;
+export const MAX_SCALE_Y = 10;
+
+export const SEGMENTS = 10;

@@ -13,7 +13,7 @@ import { THICKNESS } from "../constants/style";
 import getExtremumFunc from "./getExtremumFunc";
 
 const getParamGraph = (params) => {
-  const { start, end, precision } = params;
+  const { start, end, precision, func } = params;
 
   let minX = Math.min(start, end, DEFAULT_MIN_X);
   let maxX = Math.max(start, end, DEFAULT_MIN_X);
@@ -26,7 +26,7 @@ const getParamGraph = (params) => {
   const scaleX = SIZE_X / (maxX - minX);
 
   const { min, max } = getExtremumFunc({
-    ...params,
+    func,
     start: minX,
     end: maxX,
     precision: Math.max(precision, THICKNESS.graph / (10 * scaleX)),
@@ -66,12 +66,20 @@ const getParamGraph = (params) => {
     ((globalCoord.globalMax.x - globalCoord.globalMin.x) * DEFAULT_STEP) /
     WIDTH_GRAPH;
 
+  const getCoord = (x, y) => {
+    const xAxis = (x - globalCoord.globalMin.x) * scale.x;
+    const yAxis = ((y ?? func(x)) - globalCoord.globalMax.y) * scale.y;
+    return { x: xAxis, y: yAxis };
+  };
+
   return {
     ...coords,
     ...globalCoord,
     scale,
     step,
+    getCoord,
   };
 };
 
 export default getParamGraph;
+

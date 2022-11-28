@@ -8,9 +8,14 @@ import { useController } from "react-hook-form";
 import { ReactComponent as IconSelect } from "../../../../assets/select.svg";
 
 import styles from "./styles.module.css";
-import FUNCTIONS from "../../../../constants/func";
 
-const SelectFunc = ({ control, nameField, disabled }) => {
+const Select = ({
+  control,
+  nameField,
+  disabled,
+  data = [],
+  isMath = false,
+}) => {
   const {
     field: { onChange, onBlur, name, value, ref },
   } = useController({
@@ -41,7 +46,11 @@ const SelectFunc = ({ control, nameField, disabled }) => {
         type="button"
         onClick={() => setActive(!disabled && !active)}
       >
-        <InlineMath>{"f(x) =" + FUNCTIONS[value].text}</InlineMath>
+        {isMath ? (
+          <InlineMath>{data[value].text}</InlineMath>
+        ) : (
+          data[value].text
+        )}
         {!disabled && (
           <div className={styles.icon}>
             <IconSelect />
@@ -49,7 +58,7 @@ const SelectFunc = ({ control, nameField, disabled }) => {
         )}
       </button>
       <div ref={refList} className={styles.list}>
-        {FUNCTIONS.map((funcData, index) => (
+        {data.map((item, index) => (
           <button
             type="button"
             className={classnames(
@@ -59,7 +68,7 @@ const SelectFunc = ({ control, nameField, disabled }) => {
             key={index}
             onClick={() => handleClick(index)}
           >
-            <InlineMath>{funcData.text}</InlineMath>
+            {isMath ? <InlineMath>{item.text}</InlineMath> : item.text}
           </button>
         ))}
       </div>
@@ -67,4 +76,5 @@ const SelectFunc = ({ control, nameField, disabled }) => {
   );
 };
 
-export default SelectFunc;
+export default Select;
+

@@ -36,3 +36,4 @@ const PrecisionField = ({ control, nameField, disabled, ...props }) => {
 };
 
 export default PrecisionField;
+

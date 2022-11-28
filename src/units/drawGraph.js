@@ -1,32 +1,35 @@
-import { COLORS, FONT_SIZE, THICKNESS } from "../constants/style";
-import { HEIGHT_GRAPH, WIDTH_GRAPH } from "../constants/graph";
-import getCoordGraph from "./getCoordGraph";
+import { COLORS, SIZE, THICKNESS } from "../constants/style";
+import { HEIGHT_GRAPH, SEGMENTS, WIDTH_GRAPH } from "../constants/graph";
 import getParamGraph from "./getParamGraph";
 
-const drawRectangles = (ctx, getCoord, scale, step, params) => {
-  const { start, end, precision, func, numberRectangles } = params;
-  const widthRectangle = (end - start) / numberRectangles;
-
-  const scaledWidthRectangle = widthRectangle * scale.x;
-
-  ctx.fillStyle = COLORS.rectBackground;
-  ctx.setLineDash([0, 0]);
-  ctx.strokeStyle = COLORS.rectBorder;
-  ctx.lineWidth = THICKNESS.rect;
-
-  for (let i = 0; i < numberRectangles; i++) {
-    const heightRectangle = func(start + widthRectangle * (i + 0.5));
-    const { x, y } = getCoord(start + widthRectangle * i, 0);
-    const scaledHeightRectangle = heightRectangle * scale.y;
-
-    if (scaledWidthRectangle > THICKNESS.rect * 2) {
-      ctx.fillRect(x, y, scaledWidthRectangle, scaledHeightRectangle);
-    }
-    ctx.strokeRect(x, y, scaledWidthRectangle, scaledHeightRectangle);
-  }
+const paramsGraph = {
+  start: -2,
+  end: 2,
+  precision: 0.01,
+  func: (x) => x ** 2,
 };
 
-const drawGraphFunction = (ctx, getCoord, scale, start, end, step) => {
+let dataGraph = getParamGraph(paramsGraph);
+
+const updateDataGraph = (params) => {
+  let isUpdated = false;
+
+  Object.keys(paramsGraph).forEach((key) => {
+    if (params[key] !== undefined && params[key] !== paramsGraph[key]) {
+      isUpdated = true;
+      paramsGraph[key] = params[key];
+    }
+  });
+
+  if (isUpdated) dataGraph = getParamGraph(paramsGraph);
+};
+
+const drawGraphFunction = (ctx) => {
+  const { getCoord, step, scale, globalMin, globalMax } = dataGraph;
+
+  const start = globalMin.x;
+  const end = globalMax.x;
+
   for (
     let i = start;
     i <= end;
@@ -35,6 +38,22 @@ const drawGraphFunction = (ctx, getCoord, scale, start, end, step) => {
     const { x, y } = getCoord(i);
     ctx.fillStyle = COLORS.graph;
     ctx.fillRect(x, y, THICKNESS.graph, THICKNESS.graph);
+  }
+};
+
+const drawRange = (ctx, { a, b }) => {
+  const { getCoord, scale } = dataGraph;
+
+  ctx.fillStyle = COLORS.rectBackground;
+  ctx.setLineDash([0, 0]);
+  ctx.strokeStyle = COLORS.rectBorder;
+  ctx.lineWidth = THICKNESS.rect;
+
+  const { x: x1 } = getCoord(a);
+  const { x: x2 } = getCoord(b);
+
+  if (Math.abs(b - a) * scale.x > THICKNESS.rect * 2) {
+    ctx.fillRect(x1, 0, x2 - x1, HEIGHT_GRAPH);
   }
 };
 
@@ -67,45 +86,82 @@ const drawDashLine =
     ctx.setLineDash([16, 6]);
     ctx.lineWidth = THICKNESS.normal;
     ctx.strokeStyle = ctx.fillStyle = COLORS.normal;
-    ctx.font = `${FONT_SIZE.normal}px Computer Modern Serif`;
+    ctx.font = `${SIZE.normal}px Computer Modern Serif`;
     let testCoord = coord;
 
     if (isStart) {
       ctx.textAlign = "end";
-      testCoord -= FONT_SIZE.normal / 4;
+      testCoord -= SIZE.normal / 4;
     } else {
       ctx.textAlign = "start";
-      testCoord += FONT_SIZE.normal / 4;
+      testCoord += SIZE.normal / 4;
     }
     ctx.fillText(text, testCoord, HEIGHT_GRAPH - 1);
   };
 
-const drawGraph = async (ref, params) => {
-  const { start, end, func, numberRectangles } = params;
-
-  const canvas = ref.current;
-  if (!canvas || typeof func !== "function") return;
-
-  const ctx = canvas.getContext("2d");
-
-  // Clear Canvas
+const clearCanvas = (ctx) => {
   ctx.fillStyle = COLORS.background;
   ctx.fillRect(0, 0, WIDTH_GRAPH, HEIGHT_GRAPH);
+};
 
-  // Get params
-  const { scale, globalMin, globalMax, step } = getParamGraph(params);
-  const getCoord = getCoordGraph({ globalMin, globalMax, scale, func });
-
-  drawRectangles(ctx, getCoord, scale, step, params);
-
-  // Draw axises
+const drawAxios = (ctx) => {
+  const { getCoord } = dataGraph;
   const { x: startX, y: startY } = getCoord(0, 0);
+  ctx.setLineDash([0, 0]);
   drawLine(ctx, startY); // X Axis
   drawLine(ctx, startX, false); // Y Axis
+};
 
-  drawGraphFunction(ctx, getCoord, scale, globalMin.x, globalMax.x, step);
+const drawSegmentLine = (ctx) => {
+  ctx.setLineDash([0, 0]);
+  ctx.lineWidth = THICKNESS.segmentsLine;
+  ctx.strokeStyle = ctx.fillStyle = COLORS.segments;
+};
 
-  //Draw normal
+const drawSegments = (ctx) => {
+  const { getCoord, globalMin: min, globalMax: max } = dataGraph;
+  // const widthSegmentX = 10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
+
+  const widthSegmentX = 10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
+  let currSegmentX = Math.ceil(min.x / widthSegmentX) * widthSegmentX;
+
+  const widthSegmentY = 10 ** Math.trunc(Math.log10((max.x - min.x) / SEGMENTS));
+  let currSegmentY = Math.ceil(min.y / widthSegmentY) * widthSegmentY;
+
+  ctx.strokeStyle = ctx.fillStyle = COLORS.axis;
+  ctx.setLineDash([0, 0]);
+
+  while (currSegmentX <= max.x) {
+    if (currSegmentX !== 0) {
+      const { x } = getCoord(currSegmentX, 0);
+      drawLine(ctx, x, false, drawSegmentLine);
+    }
+    currSegmentX += widthSegmentX;
+  }
+
+  while (currSegmentY <= max.y) {
+    if (currSegmentY !== 0) {
+      const { y } = getCoord(0, currSegmentY);
+      drawLine(ctx, y, true, drawSegmentLine);
+
+      // ctx.fillStyle = COLORS.axis;
+      // ctx.setLineDash([0, 0]);
+      // ctx.fillRect(
+      //   x - SIZE.segments / 2,
+      //   y - THICKNESS.segments / 2,
+      //   SIZE.segments,
+      //   THICKNESS.segments
+      // );
+    }
+    currSegmentY += widthSegmentY;
+  }
+};
+
+const drawNormal = (ctx) => {
+  const { getCoord, min, max } = dataGraph;
+  const start = min.x;
+  const end = max.x;
+
   const { x: minX } = getCoord(start, 0);
   drawLine(ctx, minX, false, drawDashLine(start));
 
@@ -115,4 +171,24 @@ const drawGraph = async (ref, params) => {
   }
 };
 
+const drawGraph = async (ref, params) => {
+  const { a, b, func } = params;
+
+  updateDataGraph(params);
+
+  const canvas = ref.current;
+  if (!canvas || typeof func !== "function") return;
+
+  const ctx = canvas.getContext("2d");
+
+  clearCanvas(ctx);
+  drawSegments(ctx);
+  drawAxios(ctx);
+  drawGraphFunction(ctx);
+  drawRange(ctx, params);
+  drawNormal(ctx);
+  // drawBorderRange(ctx, params);
+};
+
 export default drawGraph;
+

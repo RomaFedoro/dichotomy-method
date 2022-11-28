@@ -19,6 +19,7 @@ export const DEFAULT_VALUES = {
   end: 2,
   precisionCount: MIN_VALUES.precisionCount,
   funcId: 0,
+  extremumId: 0,
 };
 
 export const EMPTY_VALUES = {
@@ -26,4 +27,5 @@ export const EMPTY_VALUES = {
   end: 0,
   precisionCount: MAX_VALUES.precisionCount,
   funcId: 0,
+  extremumId: 0,
 };
